@@ -1,0 +1,2 @@
+# My API
+ Creating an API with two or more related JSON databases that contain true information on the chosen subjects. Using this data, a fully RESTful API that includes all the standard REST requirements is implemented. This project includes GET, and POST endpoints and admin functionality that can update or remove parts of the database. Additionally, users must use an HTML form to interact with the API.
