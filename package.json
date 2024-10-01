@@ -8,5 +8,11 @@
     "start": "node server.js"
   },
   "author": "Nico Diaz",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.21.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
 }
