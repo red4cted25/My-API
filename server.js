@@ -1,11 +1,11 @@
 var express = require('express')
 var app = express()
-const fs = require('fs')
+const fs = require('fs').promises
 const PORT = 5000
 const path = require('path')
 
 app.use(express.json());
-app.use(express.static('/public'));
+app.use(express.static(path.join(__dirname, '/public')));
 
 // Index
 app.get('/', (req, res) => {
@@ -13,16 +13,25 @@ app.get('/', (req, res) => {
 })
 
 app.get('/api', (req, res) => {
-    res.send('/public/index.html')
+    res.sendFile(path.join(__dirname, './public/index.html'))
 })
 
-app.get('/api/movies', (req, res) => {
-    let movies = getMovies();
-    res.json(movies);
+app.get('/api/movies', async (req, res) => {
+    const movies = await getMovies();
+    const allMovies = movies.map((movie) => {
+        const {id, title, release_year, genre} = movie;
+        return {id, title, release_year, genre};
+    })
+    res.json(allMovies);
 })
 
-app.get('/api/directors', (req, res) => {
-    res.render('index.html')
+app.get('/api/directors', async (req, res) => {
+    const directors = await getDirectors();
+    const allDirectors = directors.map((movie) => {
+        const {id, name, birthdate} = movie;
+        return {id, name, birthdate};
+    })
+    res.json(allDirectors);
 })
 
 // ! ADMIN
@@ -60,7 +69,7 @@ app.get('/add/movie/:title/:year/:genre', async (req, res) => {
 // ! FUNCTIONS
 async function getMovies() {
     try {
-        const data = fs.readFileSync(path.join(__dirname + '/data/movies.json'), 'utf8');
+        const data = await fs.readFile(path.join(__dirname + '/data/movies.json'), 'utf8');
         return JSON.parse(data);
     } catch (error) {
         console.error(error);
@@ -70,7 +79,7 @@ async function getMovies() {
 
 async function getDirectors() {
     try {
-        const data = fs.readFile(path.join(__dirname + '/data/directors.json'), 'utf8');
+        const data = await fs.readFile(path.join(__dirname + '/data/directors.json'), 'utf8');
         return JSON.parse(data);
     } catch (error) {
         console.error(error);
