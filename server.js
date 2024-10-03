@@ -16,29 +16,139 @@ app.get('/api', (req, res) => {
     res.sendFile(path.join(__dirname, './public/index.html'))
 })
 
+let ADMIN_TOKEN = "1987"
+
+// * Movie Pages
 app.get('/api/movies', async (req, res) => {
-    const movies = await getMovies();
-    const allMovies = movies.map((movie) => {
-        const {id, title, release_year, genre} = movie;
-        return {id, title, release_year, genre};
-    })
-    res.json(allMovies);
+    try {
+        const movies = await getMovies();
+        const allMovies = movies.map((movie) => {
+            const {id, title, release_year, genre} = movie;
+            return {id, title, release_year, genre};
+        })
+        res.json(allMovies);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, error: "Failed to fetch movies" });
+    }
+    
 })
 
-app.get('/api/directors', async (req, res) => {
-    const directors = await getDirectors();
-    const allDirectors = directors.map((movie) => {
-        const {id, name, birthdate} = movie;
-        return {id, name, birthdate};
-    })
-    res.json(allDirectors);
+app.get('/api/movies/search', async (req, res) => {
+    try {
+        const movies = await getMovies();
+        const {id, search, release_year, genre} = req.query
+        let sortedMovies = [...movies]
+        if(search) {
+            sortedMovies = sortedMovies.filter((movie) => {
+                return movie.title.toLowerCase().includes(search.toLowerCase());
+            })
+        }
+        if(release_year) {
+            sortedMovies = sortedMovies.filter((movie) => {
+                return movie.release_year === parseInt(release_year);
+            });
+        }
+        if(id) {
+            sortedMovies = sortedMovies.filter((movie) => {
+                return movie.id === parseInt(id);
+            });
+        }
+        if(genre) {
+            sortedMovies = sortedMovies.filter((movie) => {
+                return movie.genre.toLowerCase().includes(genre.toLowerCase());
+            });
+        }
+        if(sortedMovies.length < 1) {
+            return res.status(200).json({success:true, data:[]})
+        } 
+        res.json(sortedMovies)
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ success: false, error: "Failed to search movies" });
+    }
 })
+
+// * Director Pages
+app.get('/api/directors', async (req, res) => {
+    try {
+        const directors = await getDirectors();
+        const allDirectors = directors.map((movie) => {
+            const {id, name, birthdate} = movie;
+            return {id, name, birthdate};
+        })
+        res.json(allDirectors);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, error: "Failed to fetch directors" });
+    }
+    
+})
+
+app.get('/api/directors/search', async (req, res) => {
+    try {
+        const directors = await getDirectors();
+        const {id, name, birthyear} = req.query
+        let sortedDirectors = [...directors]
+        if(id) {
+            sortedDirectors = sortedDirectors.filter((director) => {
+                return director.id === parseInt(id);
+            });
+        }
+        if(name) {
+            sortedDirectors = sortedDirectors.filter((director) => {
+                return director.name.toLowerCase().includes(search.toLowerCase());
+            })
+        }
+        if(birthyear) {
+            sortedDirectors = sortedDirectors.filter((director) => {
+                return parseInt(director.birthdate.slice(0, 4));
+            });
+        }
+    
+        if(sortedDirectors.length < 1) {
+            return res.status(200).json({success:true, data:[]})
+        } 
+        res.json(sortedDirectors)
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, error: "Failed to search directors" });
+    }
+})
+
+app.get('/api/directors/:directorId/movies', async (req, res) => {
+    try {
+        const directorId = parseInt(req.params.directorId);
+        const directors = await getDirectors();
+        const movies = await getMovies();
+
+        // Find the director
+        const director = directors.find(d => d.id === directorId);
+        
+        if (!director) {
+            return res.status(404).json({success: false, message: 'Director not found'});
+        }
+
+        // Get all movies by this director
+        const directorMovies = movies.filter(movie => 
+            director.movies.includes(movie.id)
+        );
+
+        return res.status(200).json({success: true, data: {director: director, movies: directorMovies}});
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({success: false, error: 'Server error'});
+    }
+});
 
 // ! ADMIN
-app.get('/add/movie/:title/:year/:genre', async (req, res) => {
+app.get('/add/movie/:title/:year/:genre/:token', async (req, res) => {
     try {
-        const { title, year, genre } = req.params;
+        const { title, year, genre, token} = req.params;
         let movies = [];
+        if(token != ADMIN_TOKEN) {
+            res.send("")
+        }
         try {
             const data = fs.readFile(path.join(__dirname + '/data/movies.json'), 'utf8');
             movies = JSON.parse(data);
