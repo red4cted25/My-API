@@ -2,97 +2,81 @@
   {
     "id": 1,
     "name": "Christopher Nolan",
-    "birthdate": "1970-07-30",
-    "movies": [1, 3, 12, 23]
+    "birthdate": "1970-07-30"
   },
   {
     "id": 2,
     "name": "Francis Ford Coppola",
-    "birthdate": "1939-04-07",
-    "movies": [2]
+    "birthdate": "1939-04-07"
   },
   {
     "id": 3,
     "name": "Quentin Tarantino",
-    "birthdate": "1963-03-27",
-    "movies": [4]
+    "birthdate": "1963-03-27"
   },
   {
     "id": 4,
     "name": "Peter Jackson",
-    "birthdate": "1961-10-31",
-    "movies": [5]
+    "birthdate": "1961-10-31"
   },
   {
     "id": 5,
     "name": "Robert Zemeckis",
-    "birthdate": "1952-05-14",
-    "movies": [6, 22]
+    "birthdate": "1952-05-14"
   },
   {
     "id": 6,
     "name": "Lana and Lilly Wachowski",
-    "birthdate": "1965-06-21/1967-12-29",
-    "movies": [7]
+    "birthdate": "1965-06-21/1967-12-29"
   },
   {
     "id": 7,
     "name": "David Fincher",
-    "birthdate": "1962-08-28",
-    "movies": [8, 25]
+    "birthdate": "1962-08-28"
   },
   {
     "id": 8,
     "name": "George Lucas",
-    "birthdate": "1944-05-14",
-    "movies": [9]
+    "birthdate": "1944-05-14"
   },
   {
     "id": 9,
     "name": "Frank Darabont",
-    "birthdate": "1959-01-28",
-    "movies": [10]
+    "birthdate": "1959-01-28"
   },
   {
     "id": 10,
     "name": "Joss Whedon",
-    "birthdate": "1964-06-23",
-    "movies": [11]
+    "birthdate": "1964-06-23"
   },
   {
     "id": 11,
     "name": "Ridley Scott",
-    "birthdate": "1937-11-30",
-    "movies": [13]
+    "birthdate": "1937-11-30"
   },
   {
     "id": 12,
     "name": "Roger Allers and Rob Minkoff",
-    "birthdate": "1949-06-29/1962-08-11",
-    "movies": [14]
+    "birthdate": "1949-06-29/1962-08-11"
   },
   {
     "id": 13,
     "name": "James Cameron",
-    "birthdate": "1954-08-16",
-    "movies": [15, 20, 24]
+    "birthdate": "1954-08-16"
   },
   {
     "id": 14,
     "name": "Steven Spielberg",
-    "birthdate": "1946-12-18",
-    "movies": [16, 17, 18]
+    "birthdate": "1946-12-18"
   },
   {
     "id": 15,
     "name": "Jonathan Demme",
-    "birthdate": "1944-02-22",
-    "movies": [19]
+    "birthdate": "1944-02-22"
   },
   {
     "id": 16,
     "name": "Martin Scorsese",
-    "birthdate": "1942-11-17",
-    "movies": [21]
+    "birthdate": "1942-11-17"
   }
 ]
