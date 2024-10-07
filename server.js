@@ -176,6 +176,46 @@ app.get('/add/movie/:title/:year/:genre/:token', async (req, res) => {
     }
 })
 
+// ! ADMIN
+app.delete('/delete/movie/:id/:token', async (req, res) => {
+    try {
+        const { id, token } = req.params;
+        
+        if (token != ADMIN_TOKEN) {
+            return res.status(403).json({ message: 'Unauthorized' });
+        }
+
+        let movies = [];
+
+        try {
+            const data = await fs.promises.readFile(path.join(__dirname + '/data/movies.json'), 'utf8');
+            movies = JSON.parse(data);
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: 'Error reading movies data' });
+        }
+
+        const movieIndex = movies.findIndex(movie => movie.id === parseInt(id));
+
+        if (movieIndex === -1) {
+            return res.status(404).json({ message: 'Movie not found' });
+        }
+
+        const deletedMovie = movies.splice(movieIndex, 1);
+
+        try {
+            await fs.promises.writeFile(path.join(__dirname, 'data/movies.json'), JSON.stringify(movies, null, 2));
+            res.status(200).json({ message: 'Movie deleted successfully', movie: deletedMovie });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Error deleting movie' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error processing request');
+    }
+});
+
 // ! FUNCTIONS
 async function getMovies() {
     try {
